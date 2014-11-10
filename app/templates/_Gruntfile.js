@@ -1,3 +1,6 @@
+// Generated on <%= (new Date).toISOString().split('T')[0] %> using <%= pkg.name %> <%= pkg.version %>
+'use strict';
+
 module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
@@ -89,17 +92,17 @@ module.exports = function(grunt) {
                     dest: 'www/img/'
                 }]
             }
-        },
+        }<% if (githubPagesUrl) { %>,
         
         'gh-pages': {
             options: {
                 base: 'www',
                 branch: 'master',
-                repo: 'git@github.com:URL-TO-REPO'
+                repo: '<%= githubPagesUrl %>'
             },
             src: ['**/*', '!app/app.js']
-        }
+        } <% } %>
     });
     
-    grunt.registerTask('default', ['modernizr', 'sass:prod', 'jshint', 'newer:imagemin', 'browserify', 'gh-pages']);
+    grunt.registerTask('default', ['modernizr', 'sass:prod', 'jshint', 'newer:imagemin', 'browserify'<% if (githubPagesUrl) { %>, 'gh-pages']<% } %>);
 };

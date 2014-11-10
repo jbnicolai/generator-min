@@ -1,10 +1,10 @@
 {
-  "name": "generator-rainbowlemon",
-  "version": "0.0.0",
-  "description": "Yeoman generator",
+  "name": "generator-min",
+  "version": "0.1.0",
+  "description": "A minimal Yeoman template, using Browserify, Grunt and Github Pages",
   "license": "MIT",
   "main": "app/index.js",
-  "repository": "rainbowlemon/generator-rainbowlemon",
+  "repository": "rainbowlemon/generator-min",
   "author": {
     "name": "Aidan Jalali",
     "email": "aidanjalali@gmail.com",
@@ -15,7 +15,9 @@
     "rainbowlemon",
     "simple",
     "browserify",
-    "github pages"
+    "github pages",
+    "modernizr",
+    "grunt"
   ],
   "engines": {
     "node": ">=0.10.0"
@@ -32,7 +34,8 @@
   "dependencies": {
     "yeoman-generator": "^0.17.0",
     "chalk": "^0.5.0",
-    "yosay": "^0.3.0"
+    "yosay": "^0.3.0",
+    "git-remote-origin-url": "^1"
   },
   "devDependencies": {
     "mocha": "*"

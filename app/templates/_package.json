@@ -1,5 +1,25 @@
 {
-  "name": "package",
-  "version": "0.0.0",
-  "dependencies": {}
+    "name": "",
+    "version": "0.1.0",
+    "description": "",
+    "author": {
+        "name": "<%= userName %>",
+        "email": "<%= userEmail %>"
+    },
+    "dependencies": {
+        "fastclick":  "^1",
+        "modernizr": "^3",
+        "purecss": "0.5.x",
+        "normalizecss": "^3"
+    },
+    "devDependencies": {
+        "grunt-requirejs": "0.4.x",
+        "grunt-contrib-jshint": "0.7.x",
+        "grunt-contrib-sass": "0.5.x",
+        "grunt-contrib-watch": "0.5.x",
+        "grunt-modernizr": "0.5.x",
+        <% if (githubPagesUrl) { %>"grunt-gh-pages": "0.9.x",<% } %>
+        "grunt-contrib-imagemin": "0.8.x",
+        "grunt-newer": "0.7.x"
+    }
 }
