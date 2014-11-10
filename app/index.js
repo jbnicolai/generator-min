@@ -13,8 +13,6 @@ var MinGenerator = yeoman.generators.Base.extend({
     prompting: function () {
         var done = this.async();
 
-        // Have Yeoman greet the user.
-        this.log(this.yeoman);
         this.log(chalk.cyan('You\'re installing ') + chalk.magenta('min,') + chalk.cyan(' the super-minimal static website template.'));
 
         var prompts = [{
@@ -139,11 +137,13 @@ var MinGenerator = yeoman.generators.Base.extend({
     },
 
     install: function () {
-        this.npmInstall();
+        this.npmInstall("", function(){
+            this.log(chalk.magenta('Thanks for installing! Run "grunt" to compile, then "grunt watch" to watch for changes to your app or sass.'));
+        }.bind(this));
     },
     
     end: function(){
-        this.log(chalk.magenta('Thanks for installing! Run "grunt watch" to watch for changes to your app or sass and update as required.'));
+        this.log(chalk.magenta('Finished gruntwork. Installing npm dependencies...'));
     }
 });
 
