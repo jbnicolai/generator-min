@@ -4,21 +4,15 @@
   "description": "A minimal Yeoman template, using Browserify, Grunt and Github Pages",
   "license": "MIT",
   "main": "app/index.js",
-  "repository": "rainbowlemon/generator-min",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/rainbowlemon/generator-min.git"
+  },
   "author": {
     "name": "Aidan Jalali",
     "email": "aidanjalali@gmail.com",
     "url": "https://github.com/Rainbowlemon"
   },
-  keywords: [
-    "yeoman-generator",
-    "rainbowlemon",
-    "simple",
-    "browserify",
-    "github pages",
-    "modernizr",
-    "grunt"
-  ],
   "engines": {
     "node": ">=0.10.0"
   },
@@ -29,7 +23,13 @@
     "app"
   ],
   "keywords": [
-    "yeoman-generator"
+    "yeoman-generator",
+    "rainbowlemon",
+    "simple",
+    "browserify",
+    "github pages",
+    "modernizr",
+    "grunt"
   ],
   "dependencies": {
     "yeoman-generator": "^0.17.0",

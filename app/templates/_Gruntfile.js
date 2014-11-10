@@ -1,14 +1,15 @@
 // Generated on <%= (new Date).toISOString().split('T')[0] %> using <%= pkg.name %> <%= pkg.version %>
-'use strict';
 
 module.exports = function(grunt) {
+    'use strict';
+    
     grunt.loadNpmTasks('grunt-browserify');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-sass');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-modernizr');
-    grunt.loadNpmTasks('grunt-contrib-imagemin');
-    grunt.loadNpmTasks('grunt-gh-pages');
+    grunt.loadNpmTasks('grunt-contrib-imagemin');<% if (githubPagesUrl) { %>
+    grunt.loadNpmTasks('grunt-gh-pages');<% } %>
     grunt.loadNpmTasks('grunt-newer');
     
     grunt.initConfig({
@@ -16,19 +17,16 @@ module.exports = function(grunt) {
         
         browserify: {
             prod: {
-                src: 'app/app.js',
-                dest: 'app/build-<%= pkg.version %>.js',
+                src: 'app.js',
+                dest: 'build.js',
                 browserifyOptions: {
-                    basedir: 'app/'
+                    basedir: 'www/app/'
                 }
             }
-        }
+        },
         
         jshint: {
-            gruntfile: {
-                src: 'Gruntfile.js'
-            },
-            src: ['Gruntfile.js', 'app/**/*.js', '!app/build.js', '!app/lib/**/*']
+            src: ['Gruntfile.js', 'www/app/**/*.js', '!www/app/build.js']
         },
         
         sass: {
@@ -60,8 +58,8 @@ module.exports = function(grunt) {
         
         modernizr: {
             dist: {
-                devFile: 'node_modules/bower/modernizr/modernizr.js',
-                outputFile: 'www/app/lib/modernizr/modernizr-custom.js',
+                devFile: 'www/modernizr-latest.js',
+                outputFile: 'www/modernizr-custom.js',
                 
                 extra: {
                     load: false
@@ -100,9 +98,9 @@ module.exports = function(grunt) {
                 branch: 'master',
                 repo: '<%= githubPagesUrl %>'
             },
-            src: ['**/*', '!app/app.js']
+            src: ['**/*', '!app/**/*.js']
         } <% } %>
     });
     
-    grunt.registerTask('default', ['modernizr', 'sass:prod', 'jshint', 'newer:imagemin', 'browserify'<% if (githubPagesUrl) { %>, 'gh-pages']<% } %>);
+    grunt.registerTask('default', ['modernizr', 'sass:prod', 'jshint', 'newer:imagemin', 'browserify'<% if (githubPagesUrl) { %>, 'gh-pages'<% } %>]);
 };

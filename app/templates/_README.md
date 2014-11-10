@@ -19,7 +19,7 @@ You will need...
 
 Great! All is installed and ready to go.
 
-To see the website running on your computer, make sure you're still in the `ceriwood/` folder, and type `harp server www/` to start the Harp webserver.
+To see the website running on your computer, make sure you're still in the `<%= projectName %>/` folder, and type `harp server www/` to start the Harp webserver.
 
 
 ##### Making changes:

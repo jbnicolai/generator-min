@@ -5,7 +5,7 @@ var yeoman = require('yeoman-generator');
 var chalk = require('chalk');
 var originUrl = require('git-remote-origin-url');
 
-var MinGenerator = generators.Base.extend({
+var MinGenerator = yeoman.generators.Base.extend({
     initializing: function () {
         this.pkg = require('../package.json');
     },
@@ -15,7 +15,7 @@ var MinGenerator = generators.Base.extend({
 
         // Have Yeoman greet the user.
         this.log(this.yeoman);
-        this.log(chalk.cyan('You\'re installing "min", the super-minimal static website template.'));
+        this.log(chalk.cyan('You\'re installing ') + chalk.magenta('min,') + chalk.cyan(' the super-minimal static website template.'));
 
         var prompts = [{
             type: "input",
@@ -37,103 +37,105 @@ var MinGenerator = generators.Base.extend({
             default: true
         }];
 
-        this.prompt(prompts, function (props) {
+        this.prompt(prompts, function(props) {
             this.projectName = props.projectName;
             this.userName = props.userName;
             this.userEmail = props.userEmail;
+            var self = this;
             
-            var checkOrigin = function(){
+            function checkOrigin() {
                 originUrl('./', function(err, url){
-                    if (err) return false;
+                    self.log(url);
                     
-                    return url;
+                    if (err || !url) {
+                        requestRepoName();
+                    } else {
+                        checkRepoName(url);
+                    }
                 })
             };
             
-            var checkRepoName = function(remoteUrl){
+            function requestRepoName() {
+                self.prompt({
+                    type: "input",
+                    name: 'githubPagesUrl',
+                    message: 'What is your Github Pages address?'
+                }, function(props){
+                    var url = String(props.githubPagesUrl);
+                    
+                    if (url.slice(-4) !== '.git') {
+                        url = url + '.git';
+                    }
+                    
+                    if (url.indexOf('https://github.com/') !== -1 || url.indexOf('git@github.com:') !== -1) {
+                        setGithubUrl(url);
+                    } else {
+                        setGithubUrl('git@github.com:' + url);
+                    }
+                        
+                });
+            };
+            
+            function checkRepoName(remoteUrl) {
                 // Get the remote url of the repo
-                var repoName = (remoteUrl.indexOf('http') !== -1) ?
-                    remoteUrl.split('.com/')[1]
-                    : remoteUrl.split(':')[1];
-
-                repoName.split('.git')[0];
+                if (remoteUrl.indexOf('http') !== -1) {
+                    var protocol = 'git@github.com:';
+                    var repoName = remoteUrl.split('.com/')[1];
+                } else {
+                    var protocol = 'https://github.com/';
+                    var repoName = remoteUrl.split(':')[1];
+                }
+                
+                repoName = String(repoName).split('.git')[0];
 
                 // Ask if remote url is similar to github pages
-                this.prompt({
+                self.prompt({
                     type: 'confirm',
                     name: 'githubPages',
                     message: 'Is your Github Pages repo at ' + repoName + '.github.io ?',
                     default: true
                 }, function(props){
                     if (props.githubPages){
-                        this.githubPagesUrl = repoName + '.github.io.git';
+                        setGithubUrl(protocol + repoName + '.github.io.git');
                     } else {
-                        requestRepoName().bind(this);
+                        requestRepoName();
                     }
-                }.bind(this));
+                });
             };
             
-            var requestRepoName = function(){
-                this.prompt({
-                    type: "input",
-                    name: 'githubPagesUrl',
-                    message: 'What is your Github Pages address?'
-                }, function(props){
-                    var url = props.githubPagesUrl;
-                    
-                    if (url.indexOf('.git') === -1) {
-                        url += '.git';
-                    }
-                    
-                    if (url.indexOf('https://github.com/') !== -1 || url.indexOf('git@github.com:') !== -1) {
-                        this.githubPagesUrl = props.githubPagesUrl;
-                    } else {
-                        this.githubPagesUrl = 'git@github.com:' + url;
-                    }
-                        
-                }.bind(this));
+            function setGithubUrl(url) {
+                self.githubPagesUrl = url;
+                
+                done();
             };
             
             if (props.githubPages) {
-                var remoteUrl = checkOrigin();
-                
-                if (remoteUrl){
-                    checkRepoName(remoteUrl).bind(this);
-                } else {
-                    requestRepoName().bind(this);
-                }
+                checkOrigin();
             } else {
-                this.githubPagesUrl = false;
+                setGithubUrl(false);
             }
             
-            done();
+            
         }.bind(this));
     },
     
-    _processDirectory: function(source, destination) {
-        var root = this.isPathAbsolute(source) ? 
-            source : 
-            path.join(this.sourceRoot(), source);
-        
-        var files = this.expandFiles('**', { dot: true, cwd: root });
+    writing: function() {
+        var source = this.sourceRoot();
+        var destination = this.destinationRoot();
+        var files = this.expandFiles('**', { dot: true, cwd: source });
 
         for (var i = 0; i < files.length; i++) {
-            var f = files[i];
-            var src = path.join(root, f);
+            var file = files[i];
+            var src = path.join(source, file);
             
-            if (path.basename(f).indexOf('_') == 0 && path.dirname(f).indexOf('/sass/') === -1) {
-                var dest = path.join(destination, path.dirname(f), path.basename(f).replace(/^_/, ''));
+            if (path.basename(file).indexOf('_') == 0 && path.dirname(file).indexOf('sass/') === -1) {
+                var dest = path.join(destination, path.dirname(file), path.basename(file).replace(/^_/, ''));
                 this.template(src, dest);
-            }
-            else {
-                var dest = path.join(destination, f);
+            } else {
+                var dest = path.join(destination, file);
                 this.copy(src, dest);
             }
         }
-    },
-
-    writing: function () {
-        this._processDirectory('root', '');
     },
 
     install: function () {

@@ -1,7 +1,8 @@
-generator-min
+# generator-min
+##### A minimal base template for Yeoman
 ---
 
-## A minimal base template for Yeoman
+
 
 ### Contains:
 
