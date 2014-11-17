@@ -1,6 +1,6 @@
 {
   "name": "generator-min",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A minimal Yeoman template, using Browserify, Grunt and Github Pages",
   "license": "MIT",
   "main": "app/index.js",

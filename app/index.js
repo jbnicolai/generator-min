@@ -43,8 +43,6 @@ var MinGenerator = yeoman.generators.Base.extend({
             
             function checkOrigin() {
                 originUrl('./', function(err, url){
-                    self.log(url);
-                    
                     if (err || !url) {
                         requestRepoName();
                     } else {
